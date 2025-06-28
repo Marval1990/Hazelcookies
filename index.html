@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hazel Cookies - Premium Chocolate Cookies</title>
+    <title>Hazel Cookies - Fresh Baked Mini Chocolate Chip Cookies</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +15,8 @@
             font-family: 'Georgia', serif;
             line-height: 1.6;
             color: #2c1810;
-            background: linear-gradient(135deg, #f4f1eb 0%, #e8ddd4 100%);
+            background: linear-gradient(135deg, #f8f5f0 0%, #ede7de 100%);
+            overflow-x: hidden;
         }
 
         .container {
@@ -26,10 +27,21 @@
 
         /* Header */
         header {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            background: rgba(139, 69, 19, 0.95);
+            backdrop-filter: blur(10px);
             color: white;
             padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            background: rgba(139, 69, 19, 0.98);
+            padding: 0.5rem 0;
         }
 
         nav {
@@ -43,6 +55,11 @@
             font-size: 2rem;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .nav-links {
@@ -54,33 +71,81 @@
         .nav-links a {
             color: white;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
         }
 
         .nav-links a:hover {
-            color: #f4e4bc;
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(139, 69, 19, 0.7), rgba(160, 82, 45, 0.7)), 
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(160, 82, 45, 0.8)), 
                         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><rect fill="%23D2691E" width="1200" height="400"/><circle fill="%23CD853F" cx="200" cy="100" r="30"/><circle fill="%23DEB887" cx="400" cy="150" r="25"/><circle fill="%23F4A460" cx="600" cy="80" r="35"/><circle fill="%23D2691E" cx="800" cy="200" r="20"/><circle fill="%23CD853F" cx="1000" cy="120" r="40"/></svg>');
             background-size: cover;
             background-position: center;
             color: white;
             text-align: center;
-            padding: 6rem 0;
+            padding: 8rem 0 6rem;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin-bottom: 1rem;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
             animation: fadeInUp 1s ease-out;
+            background: linear-gradient(45deg, #fff, #f4e4bc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero p {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             margin-bottom: 2rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             animation: fadeInUp 1s ease-out 0.3s both;
@@ -88,257 +153,746 @@
 
         .cta-button {
             display: inline-block;
-            background: #ff6b35;
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
             color: white;
-            padding: 1rem 2rem;
+            padding: 1.2rem 2.5rem;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
             animation: fadeInUp 1s ease-out 0.6s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
         }
 
         .cta-button:hover {
-            background: #e55a2b;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.5);
         }
 
         /* Products Section */
         .products {
-            padding: 4rem 0;
+            padding: 5rem 0;
             background: white;
+            position: relative;
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
+            font-size: 3rem;
+            margin-bottom: 4rem;
             color: #8B4513;
             position: relative;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .section-title::after {
             content: '';
             display: block;
-            width: 80px;
-            height: 3px;
-            background: #ff6b35;
-            margin: 1rem auto;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
+            margin: 1.5rem auto;
             border-radius: 2px;
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
         }
 
-        .product-grid {
+        .cookie-variants {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
-        .product-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
+        .cookie-variant {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 3rem;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border: 2px solid transparent;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border: 2px solid rgba(244, 228, 188, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        .cookie-variant::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .cookie-variant:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cookie-variant:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
             border-color: #ff6b35;
         }
 
         .product-image {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
+            width: 320px;
+            height: 320px;
+            border-radius: 20px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, #f4e4bc 0%, #e8ddd4 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
+            font-size: 8rem;
+            box-shadow: 0 15px 40px rgba(139, 69, 19, 0.2);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
         }
 
-        .product-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .cookie-variant:hover .product-image::after {
+            transform: translateX(100%);
+        }
+
+        .cookie-variant:hover .product-image {
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(139, 69, 19, 0.3);
+        }
+
+        .cookie-variant h3 {
+            font-size: 2.5rem;
             color: #8B4513;
+            margin-bottom: 1.5rem;
+            transition: color 0.3s ease;
         }
 
-        .product-card p {
+        .cookie-variant:hover h3 {
+            color: #ff6b35;
+        }
+
+        .cookie-variant .description {
+            font-size: 1.2rem;
             color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .pricing-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .price-option {
+            background: rgba(249, 247, 244, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 1.8rem 1.2rem;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 200px;
+        }
+
+        .price-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(229, 90, 43, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .price-option:hover::before {
+            opacity: 1;
+        }
+
+        .price-option:hover {
+            border-color: #ff6b35;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .price-option h3 {
+            color: #8B4513;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
         }
 
         .price {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
             color: #ff6b35;
             margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .savings {
+            color: #28a745;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: block;
         }
 
         .add-to-cart {
-            background: #8B4513;
+            background: linear-gradient(135deg, #8B4513, #A0522D);
             color: white;
             border: none;
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 1.5rem;
             border-radius: 25px;
             cursor: pointer;
             font-size: 1rem;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .add-to-cart::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .add-to-cart:hover::before {
+            left: 100%;
         }
 
         .add-to-cart:hover {
-            background: #A0522D;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+        }
+
+        .add-to-cart.added {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            transform: scale(0.95);
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+            padding: 3rem 0;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(244, 228, 188, 0.3);
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        .feature:nth-child(2) .feature-icon {
+            animation-delay: 0.5s;
+        }
+
+        .feature:nth-child(3) .feature-icon {
+            animation-delay: 1s;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .feature h3 {
+            color: #8B4513;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+
+
+        /* FAQ Section */
+        .faq {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .faq-item {
+            background: rgba(249, 247, 244, 0.8);
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .faq-question {
+            padding: 1.5rem 2rem;
+            background: none;
+            border: none;
+            text-align: left;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #8B4513;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .faq-answer {
+            padding: 0 2rem 1.5rem;
+            color: #666;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+            animation: fadeInDown 0.3s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
         }
 
         /* Cart */
         .cart {
             position: fixed;
-            top: 20px;
+            top: 100px;
             right: 20px;
-            background: #ff6b35;
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
             color: white;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
             z-index: 1000;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
         .cart:hover {
-            transform: scale(1.05);
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.5);
         }
 
         .cart-count {
             background: white;
             color: #ff6b35;
             border-radius: 50%;
-            width: 25px;
-            height: 25px;
+            width: 28px;
+            height: 28px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: bold;
             margin-left: 0.5rem;
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
         }
 
         /* About Section */
         .about {
-            padding: 4rem 0;
+            padding: 5rem 0;
             background: linear-gradient(135deg, #f8f5f0 0%, #ede7de 100%);
         }
 
         .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
         }
 
-        .about-text h2 {
-            font-size: 2.5rem;
+        .about h2 {
+            font-size: 3rem;
             color: #8B4513;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .about-text p {
-            font-size: 1.1rem;
+        .about p {
+            font-size: 1.2rem;
             color: #555;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .about-image {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(45deg, #D2691E, #CD853F, #DEB887);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+            line-height: 1.8;
         }
 
         /* Contact Section */
         .contact {
-            padding: 4rem 0;
+            padding: 5rem 0;
             background: white;
         }
 
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #f9f7f4;
+        .contact-info {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contact-info h3 {
+            color: #8B4513;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-item {
+            text-align: center;
             padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            background: rgba(249, 247, 244, 0.8);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .contact-item-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .contact-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(249, 247, 244, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border: 1px solid rgba(244, 228, 188, 0.3);
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-weight: bold;
             color: #8B4513;
+            font-size: 1.1rem;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0d5cc;
-            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(224, 213, 204, 0.5);
+            border-radius: 15px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #ff6b35;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.2);
+            transform: translateY(-2px);
         }
 
         .submit-btn {
-            background: #ff6b35;
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 1.2rem 2rem;
             border-radius: 25px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             width: 100%;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
         }
 
         .submit-btn:hover {
-            background: #e55a2b;
-            transform: translateY(-1px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
         }
 
         /* Footer */
         footer {
-            background: #2c1810;
+            background: linear-gradient(135deg, #2c1810, #1a0f08);
             color: white;
             text-align: center;
-            padding: 2rem 0;
+            padding: 3rem 0;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .cart-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 3rem;
+            border-radius: 25px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translate(-50%, -60%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        .close-cart {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.05);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-cart:hover {
+            color: #ff6b35;
+            background: rgba(255, 107, 53, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-details {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .qty-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .qty-btn:hover {
+            background: #e55a2b;
+            transform: scale(1.1);
+        }
+
+        .qty-display {
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b35;
+            margin: 2rem 0;
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 15px;
         }
 
         /* Animations */
@@ -353,6 +907,28 @@
             }
         }
 
+        /* Loading States */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero h1 {
@@ -363,73 +939,86 @@
                 gap: 1rem;
             }
             
-            .about-content {
+            .cookie-variants {
                 grid-template-columns: 1fr;
-                text-align: center;
+                gap: 3rem;
+                padding: 0 1rem;
             }
             
-            .product-grid {
+            .cookie-variant {
+                padding: 2rem;
+            }
+            
+            .product-image {
+                width: 280px;
+                height: 280px;
+                font-size: 6rem;
+            }
+
+            .pricing-options {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .cart {
+                top: 80px;
+                right: 10px;
+                padding: 0.8rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .contact-form {
+                padding: 2rem;
+                margin: 0 1rem;
             }
         }
 
-        /* Cart Modal */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-        }
+        @media (max-width: 480px) {
+            .hero {
+                padding: 6rem 0 4rem;
+            }
 
-        .cart-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
+            .hero h1 {
+                font-size: 2rem;
+            }
 
-        .close-cart {
-            float: right;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
+            .hero p {
+                font-size: 1.1rem;
+            }
 
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid #eee;
-        }
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
 
-        .cart-total {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ff6b35;
-            margin-top: 1rem;
-            text-align: right;
+            .product-image {
+                width: 240px;
+                height: 240px;
+                font-size: 4rem;
+            }
+
+            .cookie-variant h3 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
+    <header id="header">
         <nav class="container">
             <div class="logo">🍪 Hazel Cookies</div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#products">Products</a></li>
+                <li><a href="#products">Order</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -441,63 +1030,138 @@
     </div>
 
     <section id="home" class="hero">
-        <div class="container">
-            <h1>Premium Chocolate Cookies</h1>
-            <p>Handcrafted with love, baked to perfection</p>
-            <a href="#products" class="cta-button">Shop Now</a>
+        <div class="hero-content">
+            <div class="container">
+                <h1>Fresh Baked Mini Cookies</h1>
+                <p>Handcrafted chocolate chip cookies made with love, one batch at a time</p>
+                <a href="#products" class="cta-button">Order Now</a>
+            </div>
         </div>
     </section>
 
     <section id="products" class="products">
         <div class="container">
-            <h2 class="section-title">Our Delicious Cookies</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image">🍪</div>
-                    <h3>Classic Chocolate Chip</h3>
-                    <p>Our signature recipe with premium dark chocolate chips. Crispy outside, chewy inside - pure perfection in every bite.</p>
-                    <div class="price">₱45</div>
-                    <button class="add-to-cart" onclick="addToCart('Classic Chocolate Chip', 45)">Add to Cart</button>
+            <h2 class="section-title">Our Chocolate Chip Varieties</h2>
+            
+            <div class="cookie-variants">
+                <!-- Regular Chocolate Chip Cookies -->
+                <div class="cookie-variant">
+                    <div class="product-image" id="regularChocolateImage">
+                        🍪
+                    </div>
+                    <h3>Regular Chocolate Chip</h3>
+                    <p class="description">Classic mini cookies with premium chocolate chips. Perfect balance of soft, chewy texture with bursts of rich chocolate in every bite.</p>
+                    
+                    <div class="pricing-options">
+                        <div class="price-option">
+                            <h3>Single Cookie</h3>
+                            <div class="price">₱8</div>
+                            <button class="add-to-cart" onclick="addToCart('Regular Chocolate - Single', 8)">Add to Cart</button>
+                        </div>
+                        
+                        <div class="price-option">
+                            <h3>Pack of 6</h3>
+                            <div class="price">₱45</div>
+                            <span class="savings">Save ₱3!</span>
+                            <button class="add-to-cart" onclick="addToCart('Regular Chocolate - Pack of 6', 45)">Add to Cart</button>
+                        </div>
+                        
+                        <div class="price-option">
+                            <h3>Pack of 12</h3>
+                            <div class="price">₱85</div>
+                            <span class="savings">Save ₱11!</span>
+                            <button class="add-to-cart" onclick="addToCart('Regular Chocolate - Pack of 12', 85)">Add to Cart</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="product-card">
-                    <div class="product-image">🍫</div>
-                    <h3>Double Chocolate Fudge</h3>
-                    <p>Rich cocoa cookies loaded with chocolate chunks. For the ultimate chocolate lover who wants it all.</p>
-                    <div class="price">₱50</div>
-                    <button class="add-to-cart" onclick="addToCart('Double Chocolate Fudge', 50)">Add to Cart</button>
+                <!-- White Chocolate Chip Cookies -->
+                <div class="cookie-variant">
+                    <div class="product-image" id="whiteChocolateImage">
+                        🤍
+                    </div>
+                    <h3>White Chocolate Chip</h3>
+                    <p class="description">Delicate mini cookies featuring creamy white chocolate chips. A sweeter, milder flavor that melts beautifully in your mouth.</p>
+                    
+                    <div class="pricing-options">
+                        <div class="price-option">
+                            <h3>Single Cookie</h3>
+                            <div class="price">₱8</div>
+                            <button class="add-to-cart" onclick="addToCart('White Chocolate - Single', 8)">Add to Cart</button>
+                        </div>
+                        
+                        <div class="price-option">
+                            <h3>Pack of 6</h3>
+                            <div class="price">₱45</div>
+                            <span class="savings">Save ₱3!</span>
+                            <button class="add-to-cart" onclick="addToCart('White Chocolate - Pack of 6', 45)">Add to Cart</button>
+                        </div>
+                        
+                        <div class="price-option">
+                            <h3>Pack of 12</h3>
+                            <div class="price">₱85</div>
+                            <span class="savings">Save ₱11!</span>
+                            <button class="add-to-cart" onclick="addToCart('White Chocolate - Pack of 12', 85)">Add to Cart</button>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="product-card">
-                    <div class="product-image">🥜</div>
-                    <h3>Chocolate Almond Crunch</h3>
-                    <p>Chocolate cookies with roasted almonds for that perfect crunch. A delightful combination of sweet and nutty.</p>
-                    <div class="price">₱55</div>
-                    <button class="add-to-cart" onclick="addToCart('Chocolate Almond Crunch', 55)">Add to Cart</button>
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">🏠</span>
+                    <h3>Homemade Recipe</h3>
+                    <p>Traditional family recipe passed down through generations, ensuring authentic taste in every bite</p>
                 </div>
-
-                <div class="product-card">
-                    <div class="product-image">🌟</div>
-                    <h3>Premium Dark Chocolate</h3>
-                    <p>Made with 70% Belgian dark chocolate. Sophisticated flavor for the discerning chocolate connoisseur.</p>
-                    <div class="price">₱60</div>
-                    <button class="add-to-cart" onclick="addToCart('Premium Dark Chocolate', 60)">Add to Cart</button>
+                <div class="feature">
+                    <span class="feature-icon">📞</span>
+                    <h3>Pickup Only</h3>
+                    <p>Orders must be arranged for pickup - contact us to schedule your convenient pickup time</p>
                 </div>
-
-                <div class="product-card">
-                    <div class="product-image">🍯</div>
-                    <h3>Honey Chocolate Delight</h3>
-                    <p>A unique blend of natural honey and milk chocolate. Sweet, soft, and absolutely irresistible.</p>
-                    <div class="price">₱48</div>
-                    <button class="add-to-cart" onclick="addToCart('Honey Chocolate Delight', 48)">Add to Cart</button>
+                <div class="feature">
+                    <span class="feature-icon">💰</span>
+                    <h3>Pay on Pickup</h3>
+                    <p>Payment by cash when you collect your fresh, warm cookies - no prepayment required</p>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="product-card">
-                    <div class="product-image">🎁</div>
-                    <h3>Mixed Cookie Box</h3>
-                    <p>Can't decide? Get a box of 12 assorted cookies featuring all our popular flavors. Perfect for sharing!</p>
-                    <div class="price">₱280</div>
-                    <button class="add-to-cart" onclick="addToCart('Mixed Cookie Box', 280)">Add to Cart</button>
+
+
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    How fresh are the cookies? <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    All cookies are baked fresh to order! We typically bake your cookies within 24 hours of your pickup time to ensure maximum freshness and quality.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    How long do the cookies stay fresh? <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Our cookies stay fresh for up to 5 days when stored in an airtight container at room temperature. For longer storage, you can freeze them for up to 2 weeks.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    Can I place a large order for events? <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Absolutely! We'd love to help make your event special. For orders over 100 cookies, please contact us at least 3 days in advance to ensure availability.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    Do you have other flavors available? <span class="faq-icon">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Currently, we specialize in our signature regular and white chocolate chip varieties. We occasionally offer seasonal flavors - follow us or contact us to stay updated!
                 </div>
             </div>
         </div>
@@ -506,40 +1170,69 @@
     <section id="about" class="about">
         <div class="container">
             <div class="about-content">
-                <div class="about-text">
-                    <h2>About Hazel Cookies</h2>
-                    <p>Founded with a passion for creating the perfect chocolate cookie, Hazel Cookies has been delighting customers with our handcrafted cookies made from the finest ingredients.</p>
-                    <p>Each cookie is baked fresh daily using traditional recipes passed down through generations, combined with modern techniques to ensure consistency and quality in every bite.</p>
-                    <p>We source our chocolate from premium suppliers and use only natural ingredients - no preservatives, no artificial flavors, just pure deliciousness.</p>
-                </div>
-                <div class="about-image">
-                    👩‍🍳
-                </div>
+                <h2>About Hazel Cookies</h2>
+                <p>Welcome to Hazel Cookies, where every bite tells a story of passion and tradition. Our mini chocolate chip cookies are crafted with care using only the finest ingredients and time-tested techniques.</p>
+                <p>Founded with love for baking and a commitment to quality, each cookie is hand-shaped and baked to perfection, ensuring that golden-brown exterior and soft, chewy center that makes our cookies truly special.</p>
+                <p>We believe that the best cookies come from the heart, and every batch reflects our dedication to bringing joy to families and creating sweet memories, one cookie at a time.</p>
             </div>
         </div>
     </section>
 
     <section id="contact" class="contact">
         <div class="container">
-            <h2 class="section-title">Get in Touch</h2>
+            <h2 class="section-title">Place Your Order</h2>
+            
+            <div class="contact-info">
+                <h3>Ready to satisfy your cookie cravings?</h3>
+                <p style="color: #666; font-size: 1.1rem; margin-bottom: 3rem;">
+                    <strong>Pickup Only</strong> - Payment by cash on pickup<br>
+                    Please specify your order details in the form below
+                </p>
+            </div>
+
+            <div class="contact-details">
+                <div class="contact-item">
+                    <span class="contact-item-icon">📱</span>
+                    <h3>Call Us</h3>
+                    <p>+63 123 456 7890</p>
+                    <small>Available daily 9AM - 8PM</small>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-item-icon">📧</span>
+                    <h3>Email Us</h3>
+                    <p>hazelmagno580@gmail.com</p>
+                    <small>We respond within 24 hours</small>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-item-icon">🕒</span>
+                    <h3>Pickup Hours</h3>
+                    <p>Daily: 10AM - 7PM</p>
+                    <small>By appointment only</small>
+                </div>
+            </div>
+            
             <form class="contact-form" onsubmit="handleSubmit(event)">
                 <div class="form-group">
-                    <label for="name">Your Name</label>
+                    <label for="name">Your Name *</label>
                     <input type="text" id="name" name="name" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
                 </div>
                 <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone">
+                    <label for="order-details">Your Order Details *</label>
+                    <textarea id="order-details" name="order-details" rows="4" placeholder="Please specify what you want to order:&#10;Example: 6 regular chocolate chip cookies, 12 white chocolate chip cookies" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" placeholder="Tell us about your order or ask any questions..."></textarea>
+                    <label for="pickup-time">Preferred Pickup Time *</label>
+                    <input type="text" id="pickup-time" name="pickup-time" placeholder="e.g., Tomorrow afternoon, Friday morning, December 30th 2PM" required>
                 </div>
-                <button type="submit" class="submit-btn">Send Message</button>
+                <div class="form-group">
+                    <label for="special-notes">Additional Notes</label>
+                    <textarea id="special-notes" name="special-notes" rows="3" placeholder="Any special requests, dietary concerns, or questions..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Order Request</button>
             </form>
         </div>
     </section>
@@ -547,7 +1240,10 @@
     <footer>
         <div class="container">
             <p>&copy; 2025 Hazel Cookies. Made with ❤️ for cookie lovers everywhere.</p>
-            <p>📱 Contact: +63 123 456 7890 | 📧 hello@hazelcookies.ph</p>
+            <p>📱 Contact: +63 123 456 7890 | 📧 hazelmagno580@gmail.com</p>
+            <p style="margin-top: 1rem; opacity: 0.7; font-size: 0.9rem;">
+                Fresh baked daily • Pickup only • Cash payment on pickup
+            </p>
         </div>
     </footer>
 
@@ -555,10 +1251,10 @@
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
             <span class="close-cart" onclick="toggleCart()">&times;</span>
-            <h2>Your Cart</h2>
+            <h2 style="margin-bottom: 2rem; color: #8B4513; text-align: center;">Your Order</h2>
             <div id="cartItems"></div>
             <div class="cart-total" id="cartTotal">Total: ₱0</div>
-            <button class="submit-btn" style="margin-top: 1rem;" onclick="checkout()">Proceed to Checkout</button>
+            <button class="submit-btn" onclick="checkout()">Place Order</button>
         </div>
     </div>
 
@@ -566,6 +1262,16 @@
         let cart = [];
         let cartCount = 0;
         let cartTotal = 0;
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
 
         function addToCart(productName, price) {
             const existingItem = cart.find(item => item.name === productName);
@@ -584,16 +1290,28 @@
             cartTotal += price;
             updateCartDisplay();
             
-            // Show feedback
+            // Enhanced button feedback
             const button = event.target;
             const originalText = button.textContent;
-            button.textContent = 'Added!';
-            button.style.background = '#4CAF50';
+            const originalBg = button.style.background;
+            
+            button.textContent = '✓ Added!';
+            button.classList.add('added');
+            button.disabled = true;
+            
+            // Trigger cart count animation
+            const cartCountEl = document.getElementById('cartCount');
+            cartCountEl.style.animation = 'none';
+            setTimeout(() => {
+                cartCountEl.style.animation = 'pulse 0.5s ease';
+            }, 10);
             
             setTimeout(() => {
                 button.textContent = originalText;
-                button.style.background = '#8B4513';
-            }, 1000);
+                button.classList.remove('added');
+                button.disabled = false;
+                button.style.background = originalBg;
+            }, 1500);
         }
 
         function updateCartDisplay() {
@@ -603,18 +1321,26 @@
             cartItems.innerHTML = '';
             
             if (cart.length === 0) {
-                cartItems.innerHTML = '<p style="text-align: center; color: #666;">Your cart is empty</p>';
+                cartItems.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Your cart is empty</p>';
             } else {
                 cart.forEach((item, index) => {
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'cart-item';
                     itemDiv.innerHTML = `
-                        <div>
-                            <strong>${item.name}</strong><br>
-                            <small>₱${item.price} x ${item.quantity}</small>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-details">₱${item.price} each</div>
+                            <div class="quantity-controls">
+                                <button class="qty-btn" onclick="changeQuantity(${index}, -1)">−</button>
+                                <span class="qty-display">${item.quantity}</span>
+                                <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
+                            </div>
                         </div>
                         <div>
-                            <button onclick="removeFromCart(${index})" style="background: #ff4444; color: white; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer;">Remove</button>
+                            <div style="text-align: right; margin-bottom: 0.5rem;">
+                                <strong>₱${item.price * item.quantity}</strong>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
                         </div>
                     `;
                     cartItems.appendChild(itemDiv);
@@ -622,6 +1348,21 @@
             }
             
             document.getElementById('cartTotal').textContent = `Total: ₱${cartTotal}`;
+        }
+
+        function changeQuantity(index, change) {
+            const item = cart[index];
+            const newQuantity = item.quantity + change;
+            
+            if (newQuantity <= 0) {
+                removeFromCart(index);
+                return;
+            }
+            
+            item.quantity = newQuantity;
+            cartCount += change;
+            cartTotal += (item.price * change);
+            updateCartDisplay();
         }
 
         function removeFromCart(index) {
@@ -634,12 +1375,17 @@
 
         function toggleCart() {
             const modal = document.getElementById('cartModal');
-            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+            if (modal.style.display === 'block') {
+                modal.style.display = 'none';
+            } else {
+                modal.style.display = 'block';
+                updateCartDisplay();
+            }
         }
 
         function checkout() {
             if (cart.length === 0) {
-                alert('Your cart is empty!');
+                alert('Your cart is empty! Please add some cookies first.');
                 return;
             }
             
@@ -648,29 +1394,101 @@
                 orderSummary += `${item.name} x${item.quantity} - ₱${item.price * item.quantity}\n`;
             });
             orderSummary += `\nTotal: ₱${cartTotal}`;
-            orderSummary += '\n\nThank you for your order! We will contact you shortly to arrange payment and delivery.';
+            orderSummary += '\n\nPlease fill out the contact form below to complete your order!';
             
             alert(orderSummary);
             
-            // Reset cart
-            cart = [];
-            cartCount = 0;
-            cartTotal = 0;
-            updateCartDisplay();
+            // Auto-fill order details in the form
+            const orderDetailsField = document.getElementById('order-details');
+            let autoFillText = '';
+            cart.forEach(item => {
+                autoFillText += `${item.name} x${item.quantity}\n`;
+            });
+            orderDetailsField.value = autoFillText;
+            
+            // Scroll to contact form
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
             toggleCart();
+            
+            // Clear cart after checkout
+            setTimeout(() => {
+                if (confirm('Would you like to clear your cart since the order details have been transferred to the form?')) {
+                    cart = [];
+                    cartCount = 0;
+                    cartTotal = 0;
+                    updateCartDisplay();
+                }
+            }, 2000);
         }
 
         function handleSubmit(event) {
             event.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const message = document.getElementById('message').value;
             
-            alert(`Thank you ${name}! We've received your message and will get back to you soon at ${email}.`);
+            // Show loading state
+            const submitBtn = event.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
             
-            // Reset form
-            event.target.reset();
+            setTimeout(() => {
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+                const orderDetails = document.getElementById('order-details').value;
+                const pickupTime = document.getElementById('pickup-time').value;
+                const specialNotes = document.getElementById('special-notes').value;
+                
+                // Create email content
+                const emailSubject = `Cookie Order from ${name}`;
+                const emailBody = `New Cookie Order Request:
+                
+Customer: ${name}
+Phone: ${phone}
+Preferred Pickup Time: ${pickupTime}
+
+Order Details:
+${orderDetails}
+
+Additional Notes:
+${specialNotes || 'None'}
+
+Payment: Cash on pickup
+                `;
+                
+                // Create mailto link
+                const mailtoLink = `mailto:hazelmagno580@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                
+                // Open email client
+                window.location.href = mailtoLink;
+                
+                alert(`Thank you ${name}! Your email client will open to send your order to hazelmagno580@gmail.com. Please send the email to complete your order request.`);
+                
+                // Reset form
+                event.target.reset();
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }, 1000);
+        }
+
+        function toggleFAQ(element) {
+            const faqItem = element.parentNode;
+            const answer = faqItem.querySelector('.faq-answer');
+            const icon = element.querySelector('.faq-icon');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if (item !== faqItem) {
+                    item.classList.remove('active');
+                    item.querySelector('.faq-answer').classList.remove('active');
+                }
+            });
+            
+            // Toggle current item
+            faqItem.classList.toggle('active');
+            answer.classList.toggle('active');
         }
 
         // Smooth scrolling for navigation links
@@ -679,9 +1497,12 @@
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
                     });
                 }
             });
@@ -694,6 +1515,30 @@
                 modal.style.display = 'none';
             }
         }
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.cookie-variant, .feature, .faq-item');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                observer.observe(el);
+            });
+        });
     </script>
 </body>
 </html>
