@@ -1047,7 +1047,7 @@
                 <!-- Regular Chocolate Chip Cookies -->
                 <div class="cookie-variant">
                     <div class="product-image" id="regularChocolateImage">
-                        🍪
+                        <img src="regular-chocolate-cookies.jpg" alt="Regular Chocolate Chip Cookies" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
                     </div>
                     <h3>Regular Chocolate Chip</h3>
                     <p class="description">Classic mini cookies with premium chocolate chips. Perfect balance of soft, chewy texture with bursts of rich chocolate in every bite.</p>
@@ -1078,7 +1078,7 @@
                 <!-- White Chocolate Chip Cookies -->
                 <div class="cookie-variant">
                     <div class="product-image" id="whiteChocolateImage">
-                        🤍
+                        <img src="white-chocolate-cookies.jpg" alt="White Chocolate Chip Cookies" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
                     </div>
                     <h3>White Chocolate Chip</h3>
                     <p class="description">Delicate mini cookies featuring creamy white chocolate chips. A sweeter, milder flavor that melts beautifully in your mouth.</p>
@@ -1211,7 +1211,12 @@
                 </div>
             </div>
             
-            <form class="contact-form" onsubmit="handleSubmit(event)">
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="contact-form" onsubmit="handleSubmit(event)">
+                <!-- Hidden field for Formspree -->
+                <input type="hidden" name="_to" value="hazelmagno580@gmail.com">
+                <input type="hidden" name="_subject" value="New Cookie Order from Hazel Cookies Website">
+                <input type="hidden" name="_next" value="https://yourusername.github.io/hazel-cookies-website?success=true">
+                
                 <div class="form-group">
                     <label for="name">Your Name *</label>
                     <input type="text" id="name" name="name" required>
@@ -1431,46 +1436,40 @@
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
             
-            setTimeout(() => {
-                const name = document.getElementById('name').value;
-                const phone = document.getElementById('phone').value;
-                const orderDetails = document.getElementById('order-details').value;
-                const pickupTime = document.getElementById('pickup-time').value;
-                const specialNotes = document.getElementById('special-notes').value;
-                
-                // Create email content
-                const emailSubject = `Cookie Order from ${name}`;
-                const emailBody = `New Cookie Order Request:
-                
-Customer: ${name}
-Phone: ${phone}
-Preferred Pickup Time: ${pickupTime}
-
-Order Details:
-${orderDetails}
-
-Additional Notes:
-${specialNotes || 'None'}
-
-Payment: Cash on pickup
-                `;
-                
-                // Create mailto link
-                const mailtoLink = `mailto:hazelmagno580@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-                
-                // Open email client
-                window.location.href = mailtoLink;
-                
-                alert(`Thank you ${name}! Your email client will open to send your order to hazelmagno580@gmail.com. Please send the email to complete your order request.`);
-                
-                // Reset form
-                event.target.reset();
-                
+            // Get form data
+            const formData = new FormData(event.target);
+            
+            // Submit to Formspree
+            fetch(event.target.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // Success
+                    alert('Thank you! Your order has been sent successfully. We will contact you soon to confirm your pickup time.');
+                    event.target.reset();
+                    
+                    // Clear cart after successful order
+                    cart = [];
+                    cartCount = 0;
+                    cartTotal = 0;
+                    updateCartDisplay();
+                } else {
+                    // Error
+                    alert('Oops! There was a problem submitting your order. Please try again or contact us directly at hazelmagno580@gmail.com');
+                }
+            }).catch(error => {
+                // Network error
+                alert('There was a problem sending your order. Please check your internet connection or contact us directly at hazelmagno580@gmail.com');
+            }).finally(() => {
                 // Reset button
                 submitBtn.textContent = originalText;
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
-            }, 1000);
+            });
         }
 
         function toggleFAQ(element) {
